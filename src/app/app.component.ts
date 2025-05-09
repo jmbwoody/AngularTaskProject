@@ -22,6 +22,13 @@ import { MenuItem } from 'primeng/api';
 export class AppComponent {
   items: MenuItem[] = [
     {
+      label: 'Home',
+      icon: 'pi pi-home',
+      command: () => {
+        window.location.href = 'https://jmbwoody.github.io/PortfolioWebsite/';
+      }
+    },
+    {
       label: 'Tasks',
       icon: 'pi pi-check-square',
       routerLink: '/tasks'

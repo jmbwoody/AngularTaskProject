@@ -10,6 +10,11 @@
   gap: 1rem;
   margin-bottom: 2rem;
   max-width: 500px;
+  padding: 1.5rem;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .task-lists {
@@ -20,9 +25,11 @@
 
 .task-list {
   min-height: 200px;
-  padding: 1rem;
-  border-radius: 4px;
-  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  background-color: white;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
 
   h2 {

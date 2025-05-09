@@ -1,0 +1,116 @@
+<div class="container">
+  <div class="add-task">
+    <input 
+      type="text" 
+      pInputText 
+      [(ngModel)]="newTask.title" 
+      placeholder="Task title"
+      (keyup.enter)="addTask()"
+    >
+    <textarea 
+      pInputTextarea 
+      [(ngModel)]="newTask.description" 
+      placeholder="Task description"
+    ></textarea>
+    <p-button 
+      label="Add Task" 
+      (onClick)="addTask()"
+    ></p-button>
+  </div>
+
+  <div class="task-lists">
+    <div 
+      class="task-list todo-list" 
+      (dragover)="onDragOver($event)" 
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event, false)"
+    >
+      <h2>To Do</h2>
+      <p-card *ngFor="let task of tasks | filterTasks:false" 
+        [draggable]="true"
+        (dragstart)="onDragStart($event, task)"
+      >
+        <div class="task-header">
+          <h3>{{ task.title }}</h3>
+          <div class="task-actions">
+            <p-button 
+              icon="pi pi-check" 
+              (onClick)="toggleTaskCompletion(task)"
+              severity="success"
+            ></p-button>
+            <p-button 
+              icon="pi pi-pencil" 
+              (onClick)="editTask(task)"
+              severity="warning"
+            ></p-button>
+            <p-button 
+              icon="pi pi-trash" 
+              (onClick)="deleteTask(task)"
+              severity="danger"
+            ></p-button>
+          </div>
+        </div>
+        <p>{{ task.description }}</p>
+      </p-card>
+    </div>
+
+    <div 
+      class="task-list done-list" 
+      (dragover)="onDragOver($event)" 
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event, true)"
+    >
+      <h2>Done</h2>
+      <p-card *ngFor="let task of tasks | filterTasks:true"
+        [draggable]="true"
+        (dragstart)="onDragStart($event, task)"
+      >
+        <div class="task-header">
+          <h3>{{ task.title }}</h3>
+          <div class="task-actions">
+            <p-button 
+              icon="pi pi-undo" 
+              (onClick)="toggleTaskCompletion(task)"
+              severity="info"
+            ></p-button>
+            <p-button 
+              icon="pi pi-pencil" 
+              (onClick)="editTask(task)"
+              severity="warning"
+            ></p-button>
+            <p-button 
+              icon="pi pi-trash" 
+              (onClick)="deleteTask(task)"
+              severity="danger"
+            ></p-button>
+          </div>
+        </div>
+        <p>{{ task.description }}</p>
+      </p-card>
+    </div>
+  </div>
+
+  <p-dialog 
+    [(visible)]="showDialog" 
+    [modal]="true" 
+    header="Edit Task"
+  >
+    <div class="edit-task" *ngIf="editingTask">
+      <input 
+        type="text" 
+        pInputText 
+        [(ngModel)]="editingTask.title" 
+        placeholder="Task title"
+      >
+      <textarea 
+        pInputTextarea 
+        [(ngModel)]="editingTask.description" 
+        placeholder="Task description"
+      ></textarea>
+      <p-button 
+        label="Save" 
+        (onClick)="saveEditedTask()"
+      ></p-button>
+    </div>
+  </p-dialog>
+</div> 

@@ -1,12 +1,35 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MenubarModule } from 'primeng/menubar';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  standalone: true,
+  imports: [CommonModule, RouterModule, MenubarModule],
+  template: `
+    <p-menubar [model]="items"></p-menubar>
+    <router-outlet></router-outlet>
+  `,
+  styles: [`
+    :host {
+      display: block;
+      padding: 1rem;
+    }
+  `]
 })
 export class AppComponent {
-  title = 'angular-todo-app';
+  items: MenuItem[] = [
+    {
+      label: 'Tasks',
+      icon: 'pi pi-check-square',
+      routerLink: '/tasks'
+    },
+    {
+      label: 'IMDB Search',
+      icon: 'pi pi-search',
+      routerLink: '/imdb'
+    }
+  ];
 }

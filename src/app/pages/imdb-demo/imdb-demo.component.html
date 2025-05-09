@@ -1,0 +1,175 @@
+<div class="container mx-auto p-4">
+  <p-toast></p-toast>
+  <p-card header="IMDB Movie Search">
+    <div class="flex flex-column gap-4">
+      <!-- Search Form -->
+      <div class="flex gap-2">
+        <input 
+          type="text" 
+          pInputText 
+          [(ngModel)]="searchQuery" 
+          placeholder="Search for movies..."
+          (keyup.enter)="searchMovies()"
+          [disabled]="loading"
+        />
+        <button 
+          pButton 
+          label="Search" 
+          (click)="searchMovies()"
+          [disabled]="loading || !searchQuery.trim()"
+        ></button>
+      </div>
+
+      <!-- Error Message -->
+      <p-message 
+        *ngIf="error" 
+        severity="error" 
+        [text]="error"
+      ></p-message>
+
+      <!-- Loading Spinner -->
+      <div *ngIf="loading" class="flex justify-content-center">
+        <p-progressSpinner></p-progressSpinner>
+      </div>
+
+      <!-- Search Results -->
+      <p-accordion *ngIf="!loading && movies.length > 0" 
+                  [multiple]="false"
+                  [(activeIndex)]="activeAccordionIndex">
+        <p-accordionTab header="Search Results ({{ movies.length }} movies)">
+          <div class="movie-grid">
+            <div *ngFor="let movie of movies" class="movie-card">
+              <p-card [style]="{'margin-bottom': '1rem'}">
+                <ng-template pTemplate="header">
+                  <div class="poster-container">
+                    <img 
+                      [src]="movie.poster" 
+                      [alt]="movie.title"
+                      (error)="handleImageError($event)"
+                    />
+                  </div>
+                </ng-template>
+                <h3 class="movie-title">{{ movie.title }}</h3>
+                <p>Year: {{ movie.year }}</p>
+                <p>Rating: {{ movie.rating }}/10</p>
+                <div class="button-container">
+
+                  <button 
+                    pButton 
+                    label="View Details" 
+                    (click)="getMovieDetails(movie.id)"
+                    [disabled]="loading"
+                    class="p-button-sm"
+                  ></button>
+
+                  <button 
+                    pButton 
+                    [icon]="isFavorite(movie.id) ? 'pi pi-heart-fill' : 'pi pi-heart'"
+                    (click)="toggleFavorite(movie)"
+                    [class.p-button-danger]="isFavorite(movie.id)"
+                    class="p-button-sm p-button-outlined"
+                    pTooltip="Add to favorites"
+                  ></button>
+
+                </div>
+              </p-card>
+            </div>
+          </div>
+        </p-accordionTab>
+      </p-accordion>
+
+      <!-- No Results Message -->
+      <div *ngIf="!loading && searchQuery && movies.length === 0" class="text-center">
+        <p>No movies found. Try a different search term.</p>
+      </div>
+
+      <!-- Movie Details -->
+      <div *ngIf="selectedMovie" class="mt-4">
+        <p-card header="Movie Details">
+          <div class="movie-details-grid">
+            <div class="movie-details-content">
+              <h2>{{ selectedMovie.title }}</h2>
+              <p><strong>Year:</strong> {{ selectedMovie.year }}</p>
+              <p><strong>Rating:</strong> {{ selectedMovie.rating }}/10</p>
+              <p><strong>Director:</strong> {{ selectedMovie.director.name }}</p>
+              <p><strong>Genres:</strong> {{ selectedMovie.genres.join(', ') }}</p>
+              <p><strong>Plot:</strong> {{ selectedMovie.plot }}</p>
+              <h3>Cast:</h3>
+              <ul>
+                <li *ngFor="let actor of selectedMovie.cast">
+                  {{ actor.name }} as {{ actor.character }}
+                </li>
+              </ul>
+            </div>
+            <div class="movie-details-poster">
+              <div class="details-poster-container">
+                <img 
+                  [src]="selectedMovie.poster" 
+                  [alt]="selectedMovie.title"
+                  (error)="handleImageError($event)"
+                />
+              </div>
+            </div>
+          </div>
+        </p-card>
+      </div>
+
+      <!-- Top 10 Favorites -->
+      <div *ngIf="favorites.length > 0" class="mt-4">
+        <p-card header="Top Favorites">
+          <div class="favorites-grid" 
+               cdkDropList 
+               cdkDropListOrientation="horizontal"
+               (cdkDropListDropped)="onDrop($event)">
+            <div *ngFor="let movie of favorites" 
+                 class="favorite-card" 
+                 cdkDrag
+                 [cdkDragData]="movie">
+              <div class="poster-container">
+                <img 
+                  [src]="movie.poster" 
+                  [alt]="movie.title"
+                  (error)="handleImageError($event)"
+                />
+                <div class="drag-handle" cdkDragHandle>
+                  <i class="pi pi-arrows-alt"></i>
+                </div>
+              </div>
+              <div class="favorite-info">
+                <h3>{{ movie.title }}</h3>
+                <p>{{ movie.year }}</p>
+                <p>{{ movie.rating }}/10</p>
+              </div>
+              <div class="favorite-buttons">
+                <button 
+                  pButton 
+                  label="Details" 
+                  (click)="getMovieDetails(movie.id)"
+                  [disabled]="loading"
+                  class="p-button-sm"
+                ></button>
+                <button 
+                  pButton 
+                  icon="pi pi-times" 
+                  label=""
+                  class="p-button-danger smallButton"
+                  (click)="toggleFavorite(movie)"
+                ></button>
+              </div>
+            </div>
+          </div>
+          <div class="email-section mt-4">
+            <button 
+              pButton 
+              label="Email My Favorites" 
+              icon="pi pi-envelope"
+              (click)="sendFavoritesEmail()"
+              [disabled]="loading"
+              class="p-button-primary"
+            ></button>
+          </div>
+        </p-card>
+      </div>
+    </div>
+  </p-card>
+</div> 

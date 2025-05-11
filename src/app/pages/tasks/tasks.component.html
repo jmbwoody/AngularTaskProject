@@ -1,21 +1,57 @@
 <div class="container">
-  <div class="add-task">
-    <input 
-      type="text" 
-      pInputText 
-      [(ngModel)]="newTask.title" 
-      placeholder="Task title"
-      (keyup.enter)="addTask()"
-    >
-    <textarea 
-      pInputTextarea 
-      [(ngModel)]="newTask.description" 
-      placeholder="Task description"
-    ></textarea>
-    <p-button 
-      label="Add Task" 
-      (onClick)="addTask()"
-    ></p-button>
+  <div class="top-section">
+    <div class="add-task">
+      <input 
+        type="text" 
+        pInputText 
+        [(ngModel)]="newTask.title" 
+        placeholder="Task title"
+        (keyup.enter)="addTask()"
+      >
+      <textarea 
+        pInputTextarea 
+        [(ngModel)]="newTask.description" 
+        placeholder="Task description"
+      ></textarea>
+      <p-button 
+        label="Add Task" 
+        (onClick)="addTask()"
+      ></p-button>
+    </div>
+
+    <div class="instructions-card">
+      <h3>How to Use</h3>
+      <div class="instruction-steps">
+        <div class="step">
+          <i class="pi pi-plus-circle"></i>
+          <div class="step-content">
+            <h4>Add a Task</h4>
+            <p>Type title and description, click Add or press Enter</p>
+          </div>
+        </div>
+        <div class="step">
+          <i class="pi pi-check-circle"></i>
+          <div class="step-content">
+            <h4>Complete a Task</h4>
+            <p>Click the check mark button to move a task to the Done list</p>
+          </div>
+        </div>
+        <div class="step">
+          <i class="pi pi-pencil"></i>
+          <div class="step-content">
+            <h4>Edit a Task</h4>
+            <p>Click the pencil icon to modify a task's title or description</p>
+          </div>
+        </div>
+        <div class="step">
+          <i class="pi pi-trash"></i>
+          <div class="step-content">
+            <h4>Delete a Task</h4>
+            <p>Click the trash icon to remove a task</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="task-lists">

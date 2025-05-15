@@ -173,4 +173,16 @@
   gap: 1rem;
   padding: 1rem;
   min-width: 300px;
+}
+
+.drop-zone {
+  height: 20px;
+  margin: 5px 0;
+  background-color: transparent;
+  border: 1px dashed #ccc;
+  transition: background-color 0.2s;
+  &.drag-over {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-color: #666;
+  }
 } 

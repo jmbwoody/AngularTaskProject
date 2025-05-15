@@ -1,0 +1,20 @@
+<div class="container mx-auto p-4">
+   <p-card header="Signals Demo">
+    <div class="flex flex-column gap-4">
+      <!-- Search Form -->
+      <div class="flex">
+        <p-tabView [(activeIndex)]="current">
+          <p-tabPanel header="1st tab"> Here I will show you how two way data-binding works in Angular with Signals. Click on the next tab to see the data binding on the page. </p-tabPanel>
+          <p-tabPanel header="2nd tab"> Below you see the data binding to the Current Tab. It is now showing as 2. If you click on the 3rd tab watch how the data binding updates the Current Tab on the page to 3.</p-tabPanel>
+          <p-tabPanel header="3nd tab"> You are now on the 3rd tab and the Current Tab is showing 3. </p-tabPanel>
+        </p-tabView> 
+      </div>
+
+      <p class="current-info">Current Tab: {{ current() + 1 }}</p> 
+
+       
+ 
+    </div>
+      
+  </p-card>
+</div> 

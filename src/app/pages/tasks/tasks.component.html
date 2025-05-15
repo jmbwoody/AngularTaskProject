@@ -60,11 +60,11 @@
       (dragover)="onDragOver($event)" 
       (dragleave)="onDragLeave($event)"
       (drop)="onDrop($event, false)"
-    >
+      >
       <h2>To Do</h2>
-      <p-card *ngFor="let task of tasks | filterTasks:false" 
+      <p-card *ngFor="let task of tasks | filterTasks:false; let i = index" 
         [draggable]="true"
-        (dragstart)="onDragStart($event, task)"
+        (dragstart)="onDragStart($event, task, i)"
       >
         <div class="task-header">
           <h3>{{ task.title }}</h3>
@@ -95,11 +95,11 @@
       (dragover)="onDragOver($event)" 
       (dragleave)="onDragLeave($event)"
       (drop)="onDrop($event, true)"
-    >
+      >
       <h2>Done</h2>
-      <p-card *ngFor="let task of tasks | filterTasks:true"
+      <p-card *ngFor="let task of tasks | filterTasks:true; let i = index"
         [draggable]="true"
-        (dragstart)="onDragStart($event, task)"
+        (dragstart)="onDragStart($event, task, i)"
       >
         <div class="task-header">
           <h3>{{ task.title }}</h3>

@@ -1,37 +1,42 @@
 import { Injectable } from '@angular/core';
-import { Task } from '../models/task.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskService {
-  private tasks: Task[] = [];
+  private tasks: any[] = [];
 
-  constructor() {}
-
-  getTasks(): Task[] {
-    return [...this.tasks];
+  constructor() {
+    this.loadTasks();
   }
 
-  addTask(task: Omit<Task, 'id'>) {
-    const newTask: Task = {
-      ...task,
-      id: Date.now().toString()
-    };
-    this.tasks.push(newTask);
-    return [...this.tasks];
-  }
-
-  updateTask(task: Task) {
-    const index = this.tasks.findIndex(t => t.id === task.id);
-    if (index !== -1) {
-      this.tasks[index] = task;
+  loadTasks(): void {
+    const savedTasks = localStorage.getItem('tasks');
+    if (savedTasks) {
+      this.tasks = JSON.parse(savedTasks);
     }
-    return [...this.tasks];
   }
 
-  deleteTask(task: Task) {
-    this.tasks = this.tasks.filter(t => t.id !== task.id);
-    return [...this.tasks];
+  getTasks(): any[] {
+    return this.tasks;
+  }
+
+  addTask(task: any): void {
+    this.tasks.push(task);
+    this.saveTasks();
+  }
+
+  deleteTask(index: number): void {
+    this.tasks.splice(index, 1);
+    this.saveTasks();
+  }
+
+  updateTask(index: number, updatedTask: any): void {
+    this.tasks[index] = updatedTask;
+    this.saveTasks();
+  }
+
+  public saveTasks(): void {
+    localStorage.setItem('tasks', JSON.stringify(this.tasks));
   }
 } 

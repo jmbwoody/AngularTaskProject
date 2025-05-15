@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -26,7 +26,7 @@ import { FilterTasksPipe } from '../../pipes/filter-tasks.pipe';
   templateUrl: './tasks.component.html',
   styleUrls: ['./tasks.component.scss']
 })
-export class TasksComponent {
+export class TasksComponent implements OnInit {
   tasks: Task[] = [];
   newTask: Task = {
     id: '',
@@ -38,25 +38,37 @@ export class TasksComponent {
   showDialog = false;
   draggedTask: Task | null = null;
 
-  constructor(private taskService: TaskService) {
-    this.tasks = this.taskService.getTasks();
+  constructor(private taskService: TaskService) {}
+
+  ngOnInit(): void {
+    this.tasks = [...this.taskService.getTasks()];
   }
 
-  addTask() {
+  addTask(): void {
     if (this.newTask.title.trim()) {
-      this.tasks = this.taskService.addTask({ ...this.newTask });
+      const taskWithId = {
+        ...this.newTask,
+        id: Date.now().toString(),
+        completed: false
+      };
+      this.taskService.addTask(taskWithId);
       this.newTask = {
         id: '',
         title: '',
         description: '',
         completed: false
       };
+      this.tasks = [...this.taskService.getTasks()];
     }
   }
 
   toggleTaskCompletion(task: Task) {
     task.completed = !task.completed;
-    this.tasks = this.taskService.updateTask(task);
+    const index = this.tasks.findIndex(t => t.id === task.id);
+    if (index !== -1) {
+      this.taskService.updateTask(index, task);
+      this.tasks = [...this.taskService.getTasks()];
+    }
   }
 
   editTask(task: Task) {
@@ -66,17 +78,25 @@ export class TasksComponent {
 
   saveEditedTask() {
     if (this.editingTask && this.editingTask.title.trim()) {
-      this.tasks = this.taskService.updateTask(this.editingTask);
+      const index = this.tasks.findIndex(t => t.id === this.editingTask!.id);
+      if (index !== -1) {
+        this.taskService.updateTask(index, this.editingTask);
+        this.tasks = [...this.taskService.getTasks()];
+      }
       this.showDialog = false;
       this.editingTask = null;
     }
   }
 
   deleteTask(task: Task) {
-    this.tasks = this.taskService.deleteTask(task);
+    const index = this.tasks.findIndex(t => t.id === task.id);
+    if (index !== -1) {
+      this.taskService.deleteTask(index);
+      this.tasks = [...this.taskService.getTasks()];
+    }
   }
 
-  onDragStart(event: DragEvent, task: Task) {
+  onDragStart(event: DragEvent, task: Task, index: number) {
     this.draggedTask = task;
     if (event.dataTransfer) {
       event.dataTransfer.effectAllowed = 'move';
@@ -106,7 +126,8 @@ export class TasksComponent {
       const index = this.tasks.findIndex(t => t.id === this.draggedTask!.id);
       if (index !== -1) {
         this.tasks[index].completed = isDone;
-        this.tasks = this.taskService.updateTask(this.tasks[index]);
+        this.taskService.updateTask(index, this.tasks[index]);
+        this.tasks = [...this.taskService.getTasks()];
       }
       this.draggedTask = null;
     }

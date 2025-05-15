@@ -2,12 +2,14 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MenubarModule } from 'primeng/menubar';
-import { MenuItem } from 'primeng/api';
+import { PrimeIcons, MenuItem } from 'primeng/api';
+import { TabViewModule } from "primeng/tabview";
+
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterModule, MenubarModule],
+  imports: [CommonModule, RouterModule, MenubarModule, TabViewModule],
   template: `
     <p-menubar [model]="items"></p-menubar>
     <router-outlet></router-outlet>
@@ -37,6 +39,11 @@ export class AppComponent {
       label: 'IMDB Search',
       icon: 'pi pi-search',
       routerLink: '/imdb'
+    },
+    {
+      label: 'Signals Demo',
+      icon: 'pi pi-sun',
+      routerLink: '/signals-demo'
     }
   ];
 }
